@@ -5,7 +5,7 @@ exports.userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "User not Found",
+        error: "User not Found.",
       });
     }
 
@@ -34,7 +34,9 @@ exports.allUsers = (req, res) => {
     res.json({
       users,
     });
-  }).select("name email updated created");
+  }).select(
+    "name email wallet phoneNumber dateOfBirth profileImage updated created"
+  );
 };
 
 exports.getUser = (req, res) => {

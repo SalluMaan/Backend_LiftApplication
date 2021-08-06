@@ -11,6 +11,7 @@ dotenv.config();
 
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const vehicleRoutes = require("./routes/vehicle");
 
 // const options = {
 //   autoIndex: false, // Don't build indexes
@@ -37,7 +38,8 @@ const userRoutes = require("./routes/user");
 // connectWithRetry();
 mongoose
   .connect(process.env.MongoURI, { useNewUrlParser: true })
-  .then((d) => console.log("db Connected"));
+  .then((d) => console.log("db Connected"))
+  .catch((err) => console.log("Error:", err));
 
 mongoose.connection.on("error", (err) => {
   console.log(`DB Connection Error ${err.message}`);
@@ -49,9 +51,12 @@ app.use(bodyparser.json());
 app.use(cookieParser());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(expressValidator());
+app.use(express.static("uploads"));
+
 app.use(cors());
 app.use("/", authRoutes);
 app.use("/", userRoutes);
+app.use("/", vehicleRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.name === "UnauthorizedError") {

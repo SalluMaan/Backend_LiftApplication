@@ -7,10 +7,19 @@ exports.signup = async (req, res) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (userExists) {
     return res.status(403).json({
-      error: "Email is Taken",
+      error: "User With this Email ID is Already Exist!",
     });
   }
-  const user = await new User(req.body);
+  console.log(req.file);
+  const user = await new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    phoneNumber: req.body.phoneNumber,
+    dateOfBirth: req.body.dateOfBirth,
+    OTPCode: req.body.OTPCode,
+    profileImage: req.file.filename,
+  });
   await user.save();
   res.status(200).json({
     message: "Signup Successfully!Login Please",
@@ -24,7 +33,7 @@ exports.signin = (req, res) => {
     //Error or no user
     if (err || !user) {
       return res.status(401).json({
-        error: "User with this Email doesnt exist.Please Sign in... ",
+        error: "User with this Email Doesn't exist.Please Sign in Again...",
       });
     }
     //user is found pass/email must match
@@ -42,10 +51,10 @@ exports.signin = (req, res) => {
 
     //return  resp with user and token to frontend client
 
-    const { _id, name, email } = user;
+    const { _id, name, email, wallet, phoneNumber, dateOfBirth } = user;
     return res.json({
       token,
-      user: { _id, name, email },
+      user: { _id, name, email, wallet, phoneNumber, dateOfBirth },
     });
   });
 };

@@ -33,12 +33,19 @@ const userSchema = new mongoose.Schema({
   },
   OTPCode: {
     type: Number,
-    required: true,
+    default: true,
+  },
+  wallet: {
+    type: Number,
+    default: 0,
   },
   isAdmin: {
     type: Boolean,
     required: true,
     default: false,
+  },
+  profileImage: {
+    type: String,
   },
   updated: Date,
 });

@@ -12,6 +12,7 @@ dotenv.config();
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const vehicleRoutes = require("./routes/vehicle");
+const rideRoutes = require("./routes/ride");
 
 // const options = {
 //   autoIndex: false, // Don't build indexes
@@ -57,6 +58,7 @@ app.use(cors());
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", vehicleRoutes);
+app.use("/", rideRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.name === "UnauthorizedError") {

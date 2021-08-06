@@ -14,6 +14,9 @@ exports.vehicleById = (req, res, next, id) => {
   });
 };
 
+exports.getVehicle = (req, res) => {
+  return res.json(req.vehicleprofile);
+};
 // exports.hasAuthorization = (req, res, next) => {
 //   const authorized =
 //     req.profile && req.auth && req.profile._id === req.auth._id;
@@ -25,18 +28,20 @@ exports.vehicleById = (req, res, next, id) => {
 // };
 
 exports.allVehicles = (req, res) => {
-  Vehicle.find((err, vehicles) => {
-    if (err) {
-      return res.status(400).json({
-        error: err,
+  const vehicles = Vehicle.find()
+    .populate("postedBy", "_id name")
+    .then((vehicles) => {
+      res.json({
+        vehicles,
       });
-    }
-    res.json({
-      vehicles,
+    })
+    .catch((err) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
     });
-  }).select(
-    "name numberPlate modalYear brandName Colour vehicleImage seatCapacity isAC updated created"
-  );
 };
 
 exports.addVehicle = async (req, res) => {
@@ -46,7 +51,6 @@ exports.addVehicle = async (req, res) => {
   //     error: "User With this Email ID is Already Exist!",
   //   });
   // }
-  // console.log(req.file);
   const vehicle = await new Vehicle({
     name: req.body.name,
     numberPlate: req.body.numberPlate,
@@ -56,17 +60,12 @@ exports.addVehicle = async (req, res) => {
     seatCapacity: req.body.seatCapacity,
     isAC: req.body.isAC,
     vehicleImage: req.file.filename,
+    postedBy: req.auth._id,
   });
   await vehicle.save();
   res.status(200).json({
     message: "Vehicle has been added Successfully!",
   });
-};
-
-exports.getVehicle = (req, res) => {
-  //   req.profile.hashed_password = undefined;
-  //   req.profile.salt = undefined;
-  return res.json(req.vehicleprofile);
 };
 
 exports.updateVehicle = (req, res, next) => {

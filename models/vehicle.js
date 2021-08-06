@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { v1: uuidv1 } = require("uuid");
+const { ObjectId } = mongoose.Schema;
 
 const vehicleScheema = new mongoose.Schema({
   name: {
@@ -32,8 +32,16 @@ const vehicleScheema = new mongoose.Schema({
     type: Boolean,
     require: true,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
   vehicleImage: {
     type: String,
+  },
+  postedBy: {
+    type: ObjectId,
+    ref: "User",
   },
   salt: String,
   created: {

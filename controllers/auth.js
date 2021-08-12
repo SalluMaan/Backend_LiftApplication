@@ -19,6 +19,7 @@ exports.signup = async (req, res) => {
     dateOfBirth: req.body.dateOfBirth,
     OTPCode: req.body.OTPCode,
     profileImage: req.file.filename,
+    userType: req.body.userType,
   });
   await user.save();
   res.status(200).json({

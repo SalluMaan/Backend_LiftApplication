@@ -35,7 +35,7 @@ exports.allUsers = (req, res) => {
       users,
     });
   }).select(
-    "name email wallet phoneNumber dateOfBirth profileImage updated created"
+    "name email wallet phoneNumber userType dateOfBirth profileImage updated created"
   );
 };
 
@@ -47,6 +47,7 @@ exports.getUser = (req, res) => {
 
 exports.updateUser = (req, res, next) => {
   let user = req.profile;
+  console.log(user);
   user = _.extend(user, req.body);
   user.updated = Date.now();
   user.save((err) => {

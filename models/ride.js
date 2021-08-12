@@ -46,7 +46,7 @@ const rideScheema = new mongoose.Schema({
     required: true,
   },
   departureTime: {
-    type: String,
+    type: Date,
     required: true,
   },
   farePerTicket: {

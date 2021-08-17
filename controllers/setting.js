@@ -1,11 +1,12 @@
 const Setting = require("../models/setting");
 const _ = require("lodash");
 const User = require("../models/user");
+const { NOT_FOUND, BAD_REQUEST, UNAUTHORIZE } = require("../utils/HTTP_Code");
 
 exports.settingById = (req, res, next, id) => {
   Setting.findById(id).exec((err, setting) => {
     if (err || !setting) {
-      return res.status(400).json({
+      return res.status(NOT_FOUND).json({
         error: "Setting not Found.",
       });
     }
@@ -29,7 +30,7 @@ exports.allSettingsList = (req, res) => {
     })
     .catch((err) => {
       if (err) {
-        return res.status(400).json({
+        return res.status(BAD_REQUEST).json({
           error: err,
         });
       }
@@ -40,7 +41,7 @@ exports.verifyAdmin = (req, res, next) => {
   User.findById(req.auth._id).exec((err, user) => {
     if (!user.isAdmin && user.userType != "admin") {
       console.log(user);
-      return res.status(400).json({
+      return res.status(UNAUTHORIZE).json({
         error: "User is not Authorized to Perform this Action!.",
       });
     }
@@ -74,7 +75,7 @@ exports.updateSetting = (req, res, next) => {
   setting.updated = Date.now();
   setting.save((err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(FORBIDDEN).json({
         error: "User is not Authorized to perform this Action.",
       });
     }
@@ -86,7 +87,7 @@ exports.removeSetting = (req, res) => {
   let setting = req.settingProfile;
   setting.remove((err, setting) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(BAD_REQUEST).json({
         error: err,
       });
     }

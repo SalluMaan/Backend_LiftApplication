@@ -10,8 +10,8 @@ const {
 const { userById } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
 
-const validator = require("../validator");
 var multer = require("multer");
+const { vehicleAddValidator } = require("../validator/VehicleValidator");
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -29,7 +29,7 @@ router.post(
   "/vehicle/add-vehicle",
   upload.single("vehicleImage"),
   requireSignin,
-  validator.vehicleAddValidator,
+  vehicleAddValidator,
   addVehicle
 );
 router.get("/vehicle/all-vehicles", requireSignin, allVehicles);

@@ -11,6 +11,7 @@ const {
   removeCoupon,
   couponById,
 } = require("../controllers/coupon");
+const { couponAddValidator } = require("../validator/CouponValidation");
 
 const router = express.Router();
 router.post(
@@ -19,7 +20,7 @@ router.post(
   validator.couponAddValidator,
   addCoupon
 );
-router.get("/coupon/all-coupons", requireSignin, allCoupon);
+router.get("/coupon/all-coupons", requireSignin, couponAddValidator, allCoupon);
 router.get("/coupon/:couponID", requireSignin, getCoupon);
 router.put("/coupon/:couponID", requireSignin, updateCoupon);
 router.delete("/coupon/:couponID", requireSignin, removeCoupon);

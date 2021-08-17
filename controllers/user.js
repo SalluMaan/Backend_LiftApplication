@@ -1,10 +1,16 @@
 const User = require("../models/user");
 const _ = require("lodash");
+const {
+  NOT_FOUND,
+  FORBIDDEN,
+  BAD_REQUEST,
+  UNAUTHORIZE,
+} = require("../utils/HTTP_Code");
 
 exports.userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
     if (err || !user) {
-      return res.status(400).json({
+      return res.status(NOT_FOUND).json({
         error: "User not Found.",
       });
     }
@@ -18,7 +24,7 @@ exports.hasAuthorization = (req, res, next) => {
   const authorized =
     req.profile && req.auth && req.profile._id === req.auth._id;
   if (!authorized) {
-    return res.status(403).json({
+    return res.status(FORBIDDEN).json({
       error: "User is not Authorized to perform this Action.",
     });
   }
@@ -27,7 +33,7 @@ exports.hasAuthorization = (req, res, next) => {
 exports.allUsers = (req, res) => {
   User.find((err, users) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(BAD_REQUEST).json({
         error: err,
       });
     }
@@ -52,7 +58,7 @@ exports.updateUser = (req, res, next) => {
   user.updated = Date.now();
   user.save((err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(FORBIDDEN).json({
         error: "User is not Authorized to perform this Action.",
       });
     }
@@ -66,7 +72,7 @@ exports.removeUser = (req, res) => {
   let user = req.profile;
   user.remove((err, user) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(BAD_REQUEST).json({
         error: err,
       });
     }

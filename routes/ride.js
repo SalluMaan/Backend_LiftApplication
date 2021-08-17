@@ -9,9 +9,10 @@ const {
 } = require("../controllers/ride");
 
 const validator = require("../validator");
+const { rideAddValidator } = require("../validator/RideValidator");
 
 const router = express.Router();
-router.post("/ride/add-ride", requireSignin, addRide);
+router.post("/ride/add-ride", requireSignin, rideAddValidator, addRide);
 router.get("/rides", requireSignin, allRides);
 router.get("/ride/:rideID", requireSignin, getRide);
 router.delete("/ride/:rideID", requireSignin, removeRide);

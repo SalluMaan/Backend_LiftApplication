@@ -11,9 +11,15 @@ const {
   updateComplaint,
   removeComplaint,
 } = require("../controllers/complaint");
+const { complaintsAddValidator } = require("../validator/ComplaintValidator");
 
 const router = express.Router();
-router.post("/complaint/add-complaint", requireSignin, addComplaint);
+router.post(
+  "/complaint/add-complaint",
+  requireSignin,
+  complaintsAddValidator,
+  addComplaint
+);
 router.get("/complaint/all-complaints", requireSignin, allComplaintList);
 router.get("/complaint/:complaintID", requireSignin, getComplaint);
 router.put("/complaint/:complaintID", requireSignin, updateComplaint);

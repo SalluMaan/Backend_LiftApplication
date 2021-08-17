@@ -1,16 +1,24 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
+const sendEmail = require("../utils/emails");
+const { FORBIDDEN, UNAUTHORIZE } = require("../utils/HTTP_Code");
 
 require("dotenv").config();
-exports.signup = async (req, res) => {
+exports.signup = async (req, res, next) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (userExists) {
-    return res.status(403).json({
+    return res.status(FORBIDDEN).json({
       error: "User With this Email ID is Already Exist!",
     });
   }
   console.log(req.file);
+  await sendEmail(
+    "accountVerification",
+    { email: req.body.email, password: req.body.password },
+    next
+  );
+
   const user = await new User({
     name: req.body.name,
     email: req.body.email,
@@ -33,14 +41,14 @@ exports.signin = (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     //Error or no user
     if (err || !user) {
-      return res.status(401).json({
+      return res.status(FORBIDDEN).json({
         error: "User with this Email Doesn't exist.Please Sign in Again...",
       });
     }
     //user is found pass/email must match
     //create authenticate method in model and use here
     if (!user.authenticate(password)) {
-      return res.status(401).json({
+      return res.status(FORBIDDEN).json({
         error: "Email and Password doesn't match..",
       });
     }

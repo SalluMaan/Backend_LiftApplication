@@ -20,7 +20,7 @@ const rideScheema = new mongoose.Schema({
   },
 
   //   bestRoute: { Location },
-  addStop: [
+  pickupPoints: [
     {
       name: {
         type: String,
@@ -36,6 +36,10 @@ const rideScheema = new mongoose.Schema({
         required: true,
       },
       departureTime: {
+        type: String,
+        required: true,
+      },
+      fare: {
         type: String,
         required: true,
       },

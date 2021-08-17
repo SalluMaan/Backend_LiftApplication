@@ -1,10 +1,16 @@
 const Vehicle = require("../models/vehicle");
 const _ = require("lodash");
+const {
+  NOT_FOUND,
+  BAD_REQUEST,
+  UNAUTHORIZE,
+  FORBIDDEN,
+} = require("../utils/HTTP_Code");
 
 exports.vehicleById = (req, res, next, id) => {
   Vehicle.findById(id).exec((err, vehicle) => {
     if (err || !vehicle) {
-      return res.status(400).json({
+      return res.status(NOT_FOUND).json({
         error: "Vehicle not Found.",
       });
     }
@@ -37,7 +43,7 @@ exports.allVehicles = (req, res) => {
     })
     .catch((err) => {
       if (err) {
-        return res.status(400).json({
+        return res.status(BAD_REQUEST).json({
           error: err,
         });
       }
@@ -74,7 +80,7 @@ exports.updateVehicle = (req, res, next) => {
   vehicle.updated = Date.now();
   vehicle.save((err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(FORBIDDEN).json({
         error: "User is not Authorized to perform this Action.",
       });
     }
@@ -86,7 +92,7 @@ exports.removeVehicle = (req, res) => {
   let vehicle = req.vehicleprofile;
   vehicle.remove((err, vehicle) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(BAD_REQUEST).json({
         error: err,
       });
     }

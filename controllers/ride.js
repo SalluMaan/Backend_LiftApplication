@@ -1,5 +1,6 @@
 const Ride = require("../models/ride");
 const _ = require("lodash");
+const { NOT_FOUND, BAD_REQUEST, UNAUTHORIZE } = require("../utils/HTTP_Code");
 
 exports.allRides = (req, res) => {
   const rides = Ride.find()
@@ -11,7 +12,7 @@ exports.allRides = (req, res) => {
     })
     .catch((err) => {
       if (err) {
-        return res.status(400).json({
+        return res.status(BAD_REQUEST).json({
           error: err,
         });
       }
@@ -22,7 +23,7 @@ exports.addRide = async (req, res) => {
   const ride = await new Ride({
     pickup: req.body.pickup,
     dropoff: req.body.dropoff,
-    addStop: req.body.addStop,
+    pickupPoints: req.body.pickupPoints,
     departureDate: req.body.departureDate,
     departureTime: req.body.departureTime,
     farePerTicket: req.body.farePerTicket,
@@ -42,7 +43,7 @@ exports.rideById = (req, res, next, id) => {
     .populate("postedBy", "_id name")
     .exec((err, ride) => {
       if (err || !ride) {
-        return res.status(400).json({
+        return res.status(NOT_FOUND).json({
           error: "Ride not Found.",
         });
       }
@@ -60,7 +61,7 @@ exports.removeRide = (req, res) => {
   let ride = req.rideData;
   ride.remove((err, ride) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(BAD_REQUEST).json({
         error: err,
       });
     }

@@ -1,11 +1,12 @@
 const Complaint = require("../models/complaint");
 const _ = require("lodash");
 const User = require("../models/user");
+const { NOT_FOUND, BAD_REQUEST, UNAUTHORIZE } = require("../utils/HTTP_Code");
 
 exports.complaintById = (req, res, next, id) => {
   Complaint.findById(id).exec((err, complaint) => {
     if (err || !complaint) {
-      return res.status(400).json({
+      return res.status(NOT_FOUND).json({
         error: "Complaint not Found.",
       });
     }
@@ -29,7 +30,7 @@ exports.allComplaintList = (req, res) => {
     })
     .catch((err) => {
       if (err) {
-        return res.status(400).json({
+        return res.status(BAD_REQUEST).json({
           error: err,
         });
       }
@@ -74,7 +75,7 @@ exports.updateComplaint = (req, res, next) => {
   complaint.updated = Date.now();
   complaint.save((err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(FORBIDDEN).json({
         error: "User is not Authorized to perform this Action.",
       });
     }
@@ -86,7 +87,7 @@ exports.removeComplaint = (req, res) => {
   let complaint = req.complaintProfile;
   complaint.remove((err, complaint) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(BAD_REQUEST).json({
         error: err,
       });
     }

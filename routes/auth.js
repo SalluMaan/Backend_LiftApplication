@@ -4,6 +4,7 @@ const { userById } = require("../controllers/user");
 
 const validator = require("../validator");
 var multer = require("multer");
+const { userSignUpValidator } = require("../validator/SignupValiator");
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -20,7 +21,7 @@ const router = express.Router();
 router.post(
   "/signup",
   upload.single("profileImage"),
-  validator.userSignUpValidator,
+  userSignUpValidator,
   signup
 );
 router.post("/signin", signin);

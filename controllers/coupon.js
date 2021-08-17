@@ -1,10 +1,16 @@
 const Coupon = require("../models/coupon");
 const _ = require("lodash");
+const {
+  NOT_FOUND,
+  BAD_REQUEST,
+  FORBIDDEN,
+  UNAUTHORIZE,
+} = require("../utils/HTTP_Code");
 
 exports.couponById = (req, res, next, id) => {
   Coupon.findById(id).exec((err, coupon) => {
     if (err || !coupon) {
-      return res.status(400).json({
+      return res.status(NOT_FOUND).json({
         error: "Coupon not Found.",
       });
     }
@@ -36,7 +42,7 @@ exports.allCoupon = (req, res) => {
     })
     .catch((err) => {
       if (err) {
-        return res.status(400).json({
+        return res.status(BAD_REQUEST).json({
           error: err,
         });
       }
@@ -46,7 +52,7 @@ exports.allCoupon = (req, res) => {
 exports.addCoupon = async (req, res) => {
   const couponExists = await Coupon.findOne({ code: req.body.code });
   if (couponExists) {
-    return res.status(403).json({
+    return res.status(FORBIDDEN).json({
       error: "Coupon With this Code is Already Exist!",
     });
   }
@@ -68,7 +74,7 @@ exports.updateCoupon = (req, res, next) => {
   coupon.updated = Date.now();
   coupon.save((err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(FORBIDDEN).json({
         error: "User is not Authorized to perform this Action.",
       });
     }
@@ -80,7 +86,7 @@ exports.removeCoupon = (req, res) => {
   let coupon = req.couponProfile;
   coupon.remove((err, coupon) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(BAD_REQUEST).json({
         error: err,
       });
     }

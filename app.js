@@ -16,6 +16,7 @@ const rideRoutes = require("./routes/ride");
 const couponRoutes = require("./routes/coupon");
 const settingRoutes = require("./routes/setting");
 const complaintRoutes = require("./routes/complaint");
+const paymentRoutes = require("./routes/payment");
 
 // const options = {
 //   autoIndex: false, // Don't build indexes
@@ -65,6 +66,7 @@ app.use("/", rideRoutes);
 app.use("/", couponRoutes);
 app.use("/", settingRoutes);
 app.use("/", complaintRoutes);
+app.use("/", paymentRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.name === "UnauthorizedError") {

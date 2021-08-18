@@ -8,6 +8,7 @@ var cookieParser = require("cookie-parser");
 const bodyparser = require("body-parser");
 const cors = require("cors");
 dotenv.config();
+// const path = require("path");
 
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
@@ -17,6 +18,51 @@ const couponRoutes = require("./routes/coupon");
 const settingRoutes = require("./routes/setting");
 const complaintRoutes = require("./routes/complaint");
 const paymentRoutes = require("./routes/payment");
+
+// var Publishable_Key =
+//   "pk_test_51HQydyBQy6XzSUHh6BD33DNt0jvs3RsYs3v3M2Es6fr5g31pKzk2oVsEsO5uK3YIaCaXQRucApnxYUco3DkOflRK009KLys9Mz";
+// var Secret_Key =
+//   "sk_test_51HQydyBQy6XzSUHhniSsWWsfUJ6iLLvRwktWHvmp1A1KywHhmRytS6tWybaeYIJFSgwXu7oia5B3Q7pP4bplckyt00mNBm9emn";
+// const stripe = require("stripe")(Secret_Key);
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "ejs");
+// app.get("/stripe-pay", function (req, res) {
+//   res.render("Home", {
+//     key: Publishable_Key,
+//   });
+// });
+
+// app.post("/payment", function (req, res) {
+//   // Moreover you can take more details from user
+//   // like Address, Name, etc from form
+//   stripe.customers
+//     .create({
+//       email: "email@gmail.co",
+//       source: "tok",
+//       name: "Gautam Sharma",
+//       address: {
+//         line1: "TC 9/4 Old MES colony",
+//         postal_code: "110092",
+//         city: "New Delhi",
+//         state: "Delhi",
+//         country: "India",
+//       },
+//     })
+//     .then((customer) => {
+//       return stripe.charges.create({
+//         amount: 7000, // Charing Rs 25
+//         description: "Web Development Product",
+//         currency: "USD",
+//         customer: customer.id,
+//       });
+//     })
+//     .then((charge) => {
+//       res.send("Success"); // If no error occurs
+//     })
+//     .catch((err) => {
+//       res.send(err); // If some error occurs
+//     });
+// });
 
 // const options = {
 //   autoIndex: false, // Don't build indexes
@@ -42,7 +88,10 @@ const paymentRoutes = require("./routes/payment");
 
 // connectWithRetry();
 mongoose
-  .connect(process.env.MongoURI, { useNewUrlParser: true })
+  .connect(process.env.MongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then((d) => console.log("db Connected"))
   .catch((err) => console.log("Error:", err));
 

@@ -55,6 +55,10 @@ const userSchema = new mongoose.Schema({
   profileImage: {
     type: String,
   },
+  resetToken: {
+    type: String,
+    require: false,
+  },
   updated: Date,
 });
 

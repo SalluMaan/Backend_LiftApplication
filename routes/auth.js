@@ -1,5 +1,11 @@
 const express = require("express");
-const { signup, signin, signout } = require("../controllers/auth");
+const {
+  signup,
+  signin,
+  signout,
+  requestForgotPassword,
+  resetPassword,
+} = require("../controllers/auth");
 const { userById } = require("../controllers/user");
 
 const validator = require("../validator");
@@ -26,6 +32,8 @@ router.post(
 );
 router.post("/signin", signin);
 router.get("/signout", signout);
+router.post("/forgot-password", requestForgotPassword);
+router.post("/reset-password", resetPassword);
 
 //any route contain userID app first exec() userById
 router.param("userId", userById);

@@ -2,7 +2,10 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const sendEmail = require("../utils/emails");
-const { FORBIDDEN, UNAUTHORIZE } = require("../utils/HTTP_Code");
+const crypto = require("crypto");
+const _ = require("lodash");
+
+const { FORBIDDEN, UNAUTHORIZE, NOT_FOUND } = require("../utils/HTTP_Code");
 
 require("dotenv").config();
 exports.signup = async (req, res, next) => {
@@ -64,6 +67,61 @@ exports.signin = (req, res) => {
     return res.json({
       token,
       user: { _id, name, email, wallet, phoneNumber, dateOfBirth },
+    });
+  });
+};
+
+exports.requestForgotPassword = async (req, res) => {
+  const userExists = await User.findOne({ email: req.body.email });
+  if (!userExists) {
+    return res.status(FORBIDDEN).json({
+      error: "User With this Email ID is Does't Exist!",
+    });
+  }
+  const requestToken = crypto.randomBytes(10).toString("hex");
+
+  await sendEmail("requestForgotPassword", {
+    token: requestToken,
+    email: req.body.email,
+  });
+  let user = _.extend(userExists, { resetToken: requestToken });
+  user.updated = Date.now();
+  user.save((err) => {
+    if (err) {
+      console.log(err);
+      return res.status(FORBIDDEN).json({
+        error: "User is not Authorized to perform this Action.",
+      });
+    }
+    res.send({ message: "Reset Password Token send Successfully!" });
+  });
+};
+
+exports.resetPassword = (req, res) => {
+  User.findById(req.body.id).exec((err, user) => {
+    if (err || !user) {
+      return res.status(NOT_FOUND).json({
+        error: "User not Found.",
+      });
+    }
+
+    if (user.resetToken != req.body.resetToken) {
+      console.log(user.resetToken, req.body.resetToken);
+      return res.status(UNAUTHORIZE).json({
+        error: "Token is Expired.Kindly Request Again for Forgot Password.",
+      });
+    }
+
+    user = _.extend(user, { resetToken: null, password: req.body.password });
+    user.updated = Date.now();
+    user.save((err) => {
+      if (err) {
+        console.log(err);
+        return res.status(FORBIDDEN).json({
+          error: "User is not Authorized to perform this Action.",
+        });
+      }
+      res.send({ message: "Your Password has been Changed Successfully!" });
     });
   });
 };

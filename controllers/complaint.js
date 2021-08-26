@@ -20,6 +20,27 @@ exports.getComplaint = (req, res) => {
   return res.json(req.complaintProfile);
 };
 
+exports.allComplaintListOfUser = (req, res) => {
+  Complaint.find({ postedBy: req.auth._id })
+    .then((complaints) => {
+      if (complaints.length === 0) {
+        return res.status(NOT_FOUND).json({
+          error: "Complaint not Found.",
+        });
+      }
+      res.json({
+        complaints,
+      });
+    })
+    .catch((err) => {
+      if (err) {
+        return res.status(BAD_REQUEST).json({
+          error: err,
+        });
+      }
+    });
+};
+
 exports.allComplaintList = (req, res) => {
   const complaint = Complaint.find()
     .populate("postedBy", "_id name")

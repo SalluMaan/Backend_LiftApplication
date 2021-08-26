@@ -7,9 +7,6 @@ exports.rideAddValidator = (req, res, next) => {
   req.check("departureDate", "Departure Date is Require").notEmpty();
   req.check("departureTime", "Departure Time is Require").notEmpty();
   req.check("seatCapacity", "Kindly Specify Number of Seats.").notEmpty();
-  req
-    .check("isMiddleSeatAvailable", "Middle Seat Available or Not.")
-    .notEmpty();
 
   //check for errors
   const errors = req.validationErrors();

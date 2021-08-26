@@ -1,23 +1,23 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
-const paymentScheema = new mongoose.Schema({
-  amount: {
+const bookingScheema = new mongoose.Schema({
+  status: {
     type: String,
-    required: true,
+    default: "pending",
   },
-
-  type: {
-    type: String,
+  rideID: {
+    type: ObjectId,
     required: true,
+    ref: "Ride",
   },
   postedBy: {
     type: ObjectId,
     ref: "User",
   },
-  status: {
-    type: String,
-    default: "pending",
+  pickupID: {
+    type: ObjectId,
+    required: true,
   },
   salt: String,
   created: {
@@ -27,4 +27,4 @@ const paymentScheema = new mongoose.Schema({
   updated: Date,
 });
 
-module.exports = mongoose.model("Payment", paymentScheema);
+module.exports = mongoose.model("Booking", bookingScheema);

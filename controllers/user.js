@@ -53,7 +53,7 @@ exports.getUser = (req, res) => {
 
 exports.updateUser = (req, res, next) => {
   let user = req.profile;
-  console.log(user);
+  console.log(req.body.profileImage);
   user = _.extend(user, req.body);
   user.updated = Date.now();
   user.save((err) => {

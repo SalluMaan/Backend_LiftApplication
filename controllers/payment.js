@@ -44,19 +44,32 @@ exports.allPayments = (req, res) => {
     });
 };
 
+exports.allPaymentsOfUsers = (req, res) => {
+  Payment.find({ postedBy: req.auth._id })
+    .then((payments) => {
+      if (payments.length === 0) {
+        return res.status(NOT_FOUND).json({
+          error: "Payments not Found.",
+        });
+      }
+      res.json({
+        payments,
+      });
+    })
+    .catch((err) => {
+      if (err) {
+        return res.status(BAD_REQUEST).json({
+          error: err,
+        });
+      }
+    });
+};
+
 exports.requestPayment = async (req, res) => {
-  //   const paymentExists = await Payment.findOne({ code: req.body.code });
-  //   if (paymentExists) {
-  //     return res.status(403).json({
-  //       error: "Payment With this Code is Already Exist!",
-  //     });
-  //   }
   const payment = await new Payment({
-    rideID: req.body.rideID,
     amount: req.body.amount,
-    type: req.body.type,
-    status: req.body.status,
-    date: req.body.date,
+    type: "withdraw",
+    postedBy: req.auth._id,
   });
   await payment.save();
   res.status(200).json({

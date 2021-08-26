@@ -9,12 +9,18 @@ const rideScheema = new mongoose.Schema({
     Latitude: {
       type: String,
     },
+    name: {
+      type: String,
+    },
   },
   dropoff: {
     Longitude: {
       type: String,
     },
     Latitude: {
+      type: String,
+    },
+    name: {
       type: String,
     },
   },
@@ -43,6 +49,9 @@ const rideScheema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      description: {
+        type: String,
+      },
     },
   ],
   departureDate: {
@@ -61,12 +70,22 @@ const rideScheema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  isMiddleSeatAvailable: {
+  seatAvailable: {
+    type: Number,
+  },
+  isSeatAvailable: {
     type: Boolean,
     default: true,
   },
   description: {
     type: String,
+  },
+  title: {
+    type: String,
+  },
+  seatFor: {
+    type: String,
+    default: "both",
   },
   status: {
     type: Boolean,

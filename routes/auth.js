@@ -10,7 +10,12 @@ const { userById } = require("../controllers/user");
 
 const validator = require("../validator");
 var multer = require("multer");
-const { userSignUpValidator } = require("../validator/SignupValiator");
+const {
+  userSignUpValidator,
+  userSignInValidator,
+  userFogotPasswordValidator,
+  userResetPasswordValidator,
+} = require("../validator/AuthValiator");
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -30,10 +35,14 @@ router.post(
   userSignUpValidator,
   signup
 );
-router.post("/signin", signin);
+router.post("/signin", userSignInValidator, signin);
 router.get("/signout", signout);
-router.post("/forgot-password", requestForgotPassword);
-router.post("/reset-password", resetPassword);
+router.post(
+  "/forgot-password",
+  userFogotPasswordValidator,
+  requestForgotPassword
+);
+router.post("/reset-password", userResetPasswordValidator, resetPassword);
 
 //any route contain userID app first exec() userById
 router.param("userId", userById);

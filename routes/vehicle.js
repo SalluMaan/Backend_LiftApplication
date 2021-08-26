@@ -6,6 +6,8 @@ const {
   getVehicle,
   updateVehicle,
   removeVehicle,
+  allVehiclesOfUser,
+  vehicleBySeatSearch,
 } = require("../controllers/vehicle");
 const { userById } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
@@ -36,6 +38,8 @@ router.get("/vehicle/all-vehicles", requireSignin, allVehicles);
 router.get("/vehicle/:vehicleID", requireSignin, getVehicle);
 router.put("/vehicle/:vehicleID", requireSignin, updateVehicle);
 router.delete("/vehicle/:vehicleID", requireSignin, removeVehicle);
+router.get("/get-my-vehicle", requireSignin, allVehiclesOfUser);
+router.post("/search-vehicle", requireSignin, vehicleBySeatSearch);
 
 //any route contain vehicleID app first exec() userById
 router.param("vehicleID", vehicleById);

@@ -10,6 +10,7 @@ const {
   getComplaint,
   updateComplaint,
   removeComplaint,
+  allComplaintListOfUser,
 } = require("../controllers/complaint");
 const { complaintsAddValidator } = require("../validator/ComplaintValidator");
 
@@ -24,6 +25,7 @@ router.get("/complaint/all-complaints", requireSignin, allComplaintList);
 router.get("/complaint/:complaintID", requireSignin, getComplaint);
 router.put("/complaint/:complaintID", requireSignin, updateComplaint);
 router.delete("/complaint/:complaintID", requireSignin, removeComplaint);
+router.get("/get-my-complaint", requireSignin, allComplaintListOfUser);
 
 // //any route contain couponID app first exec() userById
 router.param("complaintID", complaintById);

@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  idCardNumber: {
+    type: String,
+  },
   salt: String,
   created: {
     type: Date,
@@ -52,7 +55,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  isAccountVerified: {
+    type: Boolean,
+    default: false,
+  },
   profileImage: {
+    type: String,
+  },
+  drivingLicense: {
     type: String,
   },
   resetToken: {

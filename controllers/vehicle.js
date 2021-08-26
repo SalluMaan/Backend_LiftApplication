@@ -20,23 +20,56 @@ exports.vehicleById = (req, res, next, id) => {
   });
 };
 
+exports.vehicleBySeatSearch = (req, res) => {
+  Vehicle.find({ seatCapacity: { $lte: req.body.seat } })
+    .then((vehicles) => {
+      if (vehicles.length === 0) {
+        return res.status(NOT_FOUND).json({
+          error: "Vehicle not Found.",
+        });
+      }
+      res.json({
+        vehicles,
+      });
+    })
+    .catch((err) => {
+      if (err) {
+        console.log(err);
+        return res.status(BAD_REQUEST).json({
+          error: err,
+        });
+      }
+    });
+};
+
 exports.getVehicle = (req, res) => {
   return res.json(req.vehicleprofile);
 };
-// exports.hasAuthorization = (req, res, next) => {
-//   const authorized =
-//     req.profile && req.auth && req.profile._id === req.auth._id;
-//   if (!authorized) {
-//     return res.status(403).json({
-//       error: "User is not Authorized to perform this Action.",
-//     });
-//   }
-// };
-
 exports.allVehicles = (req, res) => {
   const vehicles = Vehicle.find()
     .populate("postedBy", "_id name")
     .then((vehicles) => {
+      res.json({
+        vehicles,
+      });
+    })
+    .catch((err) => {
+      if (err) {
+        return res.status(BAD_REQUEST).json({
+          error: err,
+        });
+      }
+    });
+};
+
+exports.allVehiclesOfUser = (req, res) => {
+  Vehicle.find({ postedBy: req.auth._id })
+    .then((vehicles) => {
+      if (vehicles.length === 0) {
+        return res.status(NOT_FOUND).json({
+          error: "Vehicles not Found.",
+        });
+      }
       res.json({
         vehicles,
       });

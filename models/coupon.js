@@ -13,20 +13,12 @@ const couponScheema = new mongoose.Schema({
     trim: true,
   },
   from: {
-    longitude: {
-      type: String,
-    },
-    latitude: {
-      type: String,
-    },
+    type: Date,
+    required: true,
   },
   to: {
-    longitude: {
-      type: String,
-    },
-    latitude: {
-      type: String,
-    },
+    type: Date,
+    required: true,
   },
   isActive: {
     type: Boolean,

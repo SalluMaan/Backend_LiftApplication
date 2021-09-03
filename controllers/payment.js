@@ -30,6 +30,7 @@ exports.getPayment = (req, res) => {
 
 exports.allPayments = (req, res) => {
   const payment = Payment.find()
+    .populate("postedBy", "_id name")
     .then((payments) => {
       res.json({
         payments,

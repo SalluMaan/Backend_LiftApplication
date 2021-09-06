@@ -23,6 +23,13 @@ const pickupPointScheema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+  },
+  ride: {
+    type: ObjectId,
+    ref: "Ride",
+  },
 });
 
-module.exports = pickupPointScheema;
+module.exports = mongoose.model("PickupPoint", pickupPointScheema);

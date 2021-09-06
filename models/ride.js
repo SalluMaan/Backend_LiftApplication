@@ -25,7 +25,6 @@ const rideScheema = new mongoose.Schema({
     },
   },
 
-  //   bestRoute: { Location },
   pickupPoints: [
     {
       name: {

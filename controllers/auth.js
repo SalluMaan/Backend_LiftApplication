@@ -28,7 +28,6 @@ exports.signup = async (req, res, next) => {
     password: req.body.password,
     phoneNumber: req.body.phoneNumber,
     dateOfBirth: req.body.dateOfBirth,
-    OTPCode: req.body.OTPCode,
     profileImage: req.file.filename,
     userType: req.body.userType,
   });
@@ -40,6 +39,8 @@ exports.signup = async (req, res, next) => {
 
 exports.signin = (req, res) => {
   const { email, password } = req.body;
+  console.log("Request =>", email, password);
+
   //find user
   User.findOne({ email: req.body.email }, (err, user) => {
     //Error or no user
@@ -93,7 +94,10 @@ exports.requestForgotPassword = async (req, res) => {
         error: "User is not Authorized to perform this Action.",
       });
     }
-    res.send({ message: "Reset Password Token send Successfully!" });
+    res.send({
+      message: "Reset Password Token send Successfully!",
+      id: userExists._id,
+    });
   });
 };
 

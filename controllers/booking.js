@@ -80,7 +80,7 @@ exports.allBookingsOfUser = (req, res) => {
           error: "Booking not Found.",
         });
       }
-      res.json({
+      res.status(200).json({
         bookings,
       });
     })

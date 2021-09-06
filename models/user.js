@@ -34,10 +34,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  OTPCode: {
-    type: Number,
-    default: true,
-  },
+  // OTPCode: {
+  //   type: Number,
+  //   default: true,
+  // },
   wallet: {
     type: Number,
     default: 0,

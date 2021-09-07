@@ -45,14 +45,14 @@ exports.signin = (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     //Error or no user
     if (err || !user) {
-      return res.status(UNAUTHORIZE).json({
+      return res.status(FORBIDDEN).json({
         error: "User with this Email Doesn't exist.Please Sign in Again...",
       });
     }
     //user is found pass/email must match
     //create authenticate method in model and use here
     if (!user.authenticate(password)) {
-      return res.status(UNAUTHORIZE).json({
+      return res.status(FORBIDDEN).json({
         error: "Email and Password doesn't match..",
       });
     }

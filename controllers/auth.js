@@ -28,7 +28,7 @@ exports.signup = async (req, res, next) => {
     password: req.body.password,
     phoneNumber: req.body.phoneNumber,
     dateOfBirth: req.body.dateOfBirth,
-    profileImage: req.file.filename,
+    // profileImage: req.file.filename,
     userType: req.body.userType,
   });
   await user.save();

@@ -29,12 +29,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 const router = express.Router();
-router.post(
-  "/signup",
-  upload.single("profileImage"),
-  userSignUpValidator,
-  signup
-);
+router.post("/signup", userSignUpValidator, signup);
 router.post("/signin", userSignInValidator, signin);
 router.get("/signout", signout);
 router.post(

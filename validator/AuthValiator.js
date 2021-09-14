@@ -57,9 +57,22 @@ exports.userSignUpValidator = (req, res, next) => {
 exports.userSignInValidator = (req, res, next) => {
   req
     .check("email", "Email is Require.Kindly Write Your Valid Email ID!Thanks")
-    .notEmpty();
+    .notEmpty()
+    .matches(/.+\@.+\..+/)
+    .withMessage("Email must contain @.")
+    .isLength({
+      min: 4,
+      max: 2000,
+    });
 
-  req.check("password", "Password is Required.Write Your Password").notEmpty();
+  req
+    .check("password", "Password is Required.Write Your Password")
+    .notEmpty()
+    .isLength({ min: 6 })
+    .withMessage("Password must contain at least 6 charcter.")
+    .matches(/\d/)
+    .withMessage("Password must contain a number.");
+
   //check for errors
   const errors = req.validationErrors();
   if (errors) {

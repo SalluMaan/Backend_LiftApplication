@@ -12,9 +12,15 @@ const {
   reviewsByRideId,
 } = require("../controllers/review");
 const validator = require("../validator");
+const { reviewAddValidator } = require("../validator/ReviewValidation");
 
 const router = express.Router();
-router.post("/review/add-review", requireSignin, addReviews);
+router.post(
+  "/review/add-review",
+  requireSignin,
+  reviewAddValidator,
+  addReviews
+);
 router.get("/review/all-reviews", requireSignin, allReviewsList);
 router.post("/review/all-ride-reviews", requireSignin, reviewsByRideId);
 router.get("/review/:reviewID", requireSignin, getReview);

@@ -4,6 +4,8 @@ const expressJwt = require("express-jwt");
 const sendEmail = require("../utils/emails");
 const crypto = require("crypto");
 const _ = require("lodash");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const { FORBIDDEN, UNAUTHORIZE, NOT_FOUND } = require("../utils/HTTP_Code");
 
@@ -16,11 +18,6 @@ exports.signup = async (req, res, next) => {
     });
   }
   console.log(req.file);
-  await sendEmail(
-    "accountVerification",
-    { email: req.body.email, password: req.body.password },
-    next
-  );
 
   const user = await new User({
     name: req.body.name,
@@ -35,6 +32,13 @@ exports.signup = async (req, res, next) => {
   res.status(200).json({
     message: "Signup Successfully!Login Please",
   });
+  await sendEmail("signup", {
+    id: user._id,
+    email: user.email,
+    app_url: process.env.APPBASE_URL,
+  });
+
+  // //return  resp with user and token to frontend client
 };
 
 exports.signin = (req, res) => {
@@ -49,6 +53,13 @@ exports.signin = (req, res) => {
         error: "User with this Email Doesn't exist.Please Sign in Again...",
       });
     }
+
+    if (!user.isEmailVerified) {
+      return res.status(UNAUTHORIZE).json({
+        error: "Your Account havn't Verified.Kindly Check your Inbox!Thanks",
+      });
+    }
+
     //user is found pass/email must match
     //create authenticate method in model and use here
     if (!user.authenticate(password)) {
@@ -64,10 +75,19 @@ exports.signin = (req, res) => {
 
     //return  resp with user and token to frontend client
 
-    const { _id, name, email, wallet, phoneNumber, dateOfBirth } = user;
+    const { _id, name, email, wallet, phoneNumber, dateOfBirth, userType } =
+      user;
     return res.json({
       token,
-      user: { _id, name, email, wallet, phoneNumber, dateOfBirth },
+      user: {
+        _id,
+        name,
+        email,
+        wallet,
+        phoneNumber,
+        dateOfBirth,
+        userType,
+      },
     });
   });
 };

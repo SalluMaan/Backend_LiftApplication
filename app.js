@@ -21,6 +21,8 @@ const settingRoutes = require("./routes/setting");
 const complaintRoutes = require("./routes/complaint");
 const paymentRoutes = require("./routes/payment");
 const bookingRoutes = require("./routes/booking");
+const faqRoutes = require("./routes/faq");
+const reviewRoutes = require("./routes/review");
 
 mongoose
   .connect(process.env.MongoURI, {
@@ -52,6 +54,8 @@ app.use("/", settingRoutes);
 app.use("/", complaintRoutes);
 app.use("/", paymentRoutes);
 app.use("/", bookingRoutes);
+app.use("/", faqRoutes);
+app.use("/", reviewRoutes);
 
 // app.set("view engine", "ejs");
 // app.engine("html", require("ejs").renderFile);

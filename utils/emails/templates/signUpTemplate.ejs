@@ -7,16 +7,8 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>User Signup</h1>
-    <p>welcome to ecommerce platform, your email is <%= email %></p>
-    <header>To active your account press on link below</header>
-    <a
-      href="http://localhost:4000/reset_password?token=<%= token %>&id=<%= id %>"
-      ><%= token %></a
-    >
-    <img
-      src="https://th.bing.com/th/id/OIP.QTH1x_w8RBpAeCzNfHkYYQHaIO?pid=ImgDet&rs=1"
-      style="width: 300px; height: 300px"
-    />
+    <h1>Email Verfication</h1>
+    <p>Welcome to Liftick Platform, Your email is <%= email %></p>
+    <a href="<%= app_url %>/user/activate-email/<%= id %>">Click Here</a>
   </body>
 </html>

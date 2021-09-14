@@ -51,6 +51,20 @@ exports.getUser = (req, res) => {
   return res.json(req.profile);
 };
 
+exports.activateEmail = (req, res, next) => {
+  let user = req.profile;
+  user = _.extend(user, { isEmailVerified: true });
+  user.updated = Date.now();
+  user.save((err) => {
+    if (err) {
+      return res.status(FORBIDDEN).json({
+        error: "User is not Authorized to perform this Action.",
+      });
+    }
+    res.render("../utils/emails/templates/confirmation.ejs");
+  });
+};
+
 exports.updateUser = (req, res, next) => {
   let user = req.profile;
   console.log(req.body.profileImage);

@@ -24,7 +24,28 @@ const rideScheema = new mongoose.Schema({
       type: String,
     },
   },
-
+  prefrences: {
+    smoke: {
+      type: Boolean,
+      default: false,
+    },
+    luggage: {
+      type: Boolean,
+      default: false,
+    },
+    kids: {
+      type: Boolean,
+      default: false,
+    },
+    eat: {
+      type: Boolean,
+      default: false,
+    },
+    drink: {
+      type: Boolean,
+      default: false,
+    },
+  },
   pickupPoints: [
     {
       name: {
@@ -94,6 +115,12 @@ const rideScheema = new mongoose.Schema({
     type: ObjectId,
     ref: "User",
   },
+  review: [
+    {
+      type: ObjectId,
+      ref: "Review",
+    },
+  ],
   salt: String,
   created: {
     type: Date,

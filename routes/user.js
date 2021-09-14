@@ -5,6 +5,7 @@ const {
   getUser,
   updateUser,
   removeUser,
+  activateEmail,
 } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
 const router = express.Router();
@@ -31,6 +32,7 @@ router.put(
   updateUser
 );
 router.delete("/user/:userId", requireSignin, removeUser);
+router.get("/user/activate-email/:userId", activateEmail);
 
 router.param("userId", userById);
 

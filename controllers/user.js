@@ -41,7 +41,7 @@ exports.allUsers = (req, res) => {
       users,
     });
   }).select(
-    "name email wallet phoneNumber userType dateOfBirth profileImage updated created"
+    "name email wallet phoneNumber userType dateOfBirth profileImage updated created isActive"
   );
 };
 
@@ -67,8 +67,24 @@ exports.activateEmail = (req, res, next) => {
 
 exports.updateUser = (req, res, next) => {
   let user = req.profile;
-  console.log(req.body.profileImage);
   user = _.extend(user, req.body);
+  user.updated = Date.now();
+  user.save((err) => {
+    if (err) {
+      return res.status(FORBIDDEN).json({
+        error: "User is not Authorized to perform this Action.",
+      });
+    }
+    user.hashed_password = undefined;
+    user.salt = undefined;
+    res.json({ user });
+  });
+};
+
+exports.addLicense = (req, res, next) => {
+  let user = req.profile;
+  user = _.extend(user, { ...req.body, drivingLicense: req.file.filename });
+  console.log("ADD LICENSE", user);
   user.updated = Date.now();
   user.save((err) => {
     if (err) {

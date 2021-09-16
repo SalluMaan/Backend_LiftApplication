@@ -31,8 +31,7 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
   dateOfBirth: {
-    type: Date,
-    required: true,
+    type: String,
   },
   // OTPCode: {
   //   type: Number,
@@ -60,6 +59,10 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  isLicenseVerified: {
     type: Boolean,
     default: false,
   },

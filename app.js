@@ -8,7 +8,7 @@ var cookieParser = require("cookie-parser");
 const bodyparser = require("body-parser");
 const cors = require("cors");
 dotenv.config();
-const stripe = require("stripe")(process.env.SECRET_KEY);
+// const stripe = require("stripe")(process.env.SECRET_KEY);
 
 const path = require("path");
 
@@ -57,32 +57,9 @@ app.use("/", bookingRoutes);
 app.use("/", faqRoutes);
 app.use("/", reviewRoutes);
 
-// app.set("view engine", "ejs");
-// app.engine("html", require("ejs").renderFile);
-// app.use(express.static(path.join(__dirname, "./views")));
-
-// app.post("/charge", (req, res) => {
-//   try {
-//     stripe.customers
-//       .create({
-//         name: req.body.name,
-//         email: req.body.email,
-//         source: req.body.stripeToken,
-//       })
-//       .then((customer) =>
-//         stripe.charges.create({
-//           amount: req.body.amount * 100,
-//           currency: "usd",
-//           customer: customer.id,
-//           description: "Thank you for your generous donation.",
-//         })
-//       )
-//       .then(() => res.render("complete.html"))
-//       .catch((err) => console.log(err));
-//   } catch (err) {
-//     res.send(err);
-//   }
-// });
+app.set("view engine", "ejs");
+app.engine("html", require("ejs").renderFile);
+app.use(express.static(path.join(__dirname, "./views")));
 
 app.use(function (err, req, res, next) {
   if (err.name === "UnauthorizedError") {
@@ -95,50 +72,59 @@ app.listen(port, () => {
   console.log("A Node JS API is listening on PORT:", port);
 });
 
-// var Publishable_Key =
-//   "pk_test_51HQydyBQy6XzSUHh6BD33DNt0jvs3RsYs3v3M2Es6fr5g31pKzk2oVsEsO5uK3YIaCaXQRucApnxYUco3DkOflRK009KLys9Mz";
-// var Secret_Key =
-//   "sk_test_51HQydyBQy6XzSUHhniSsWWsfUJ6iLLvRwktWHvmp1A1KywHhmRytS6tWybaeYIJFSgwXu7oia5B3Q7pP4bplckyt00mNBm9emn";
-// const stripe = require("stripe")(Secret_Key);
-// app.set("views", path.join(__dirname, "views"));
-// app.set("view engine", "ejs");
-// app.get("/stripe-pay", function (req, res) {
-//   res.render("Home", {
-//     key: Publishable_Key,
-//   });
-// });
+var Publishable_Key =
+  "pk_test_51HQydyBQy6XzSUHh6BD33DNt0jvs3RsYs3v3M2Es6fr5g31pKzk2oVsEsO5uK3YIaCaXQRucApnxYUco3DkOflRK009KLys9Mz";
+var Secret_Key =
+  "sk_test_51HQydyBQy6XzSUHhniSsWWsfUJ6iLLvRwktWHvmp1A1KywHhmRytS6tWybaeYIJFSgwXu7oia5B3Q7pP4bplckyt00mNBm9emn";
+const stripe = require("stripe")(Secret_Key);
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.get("/stripe-pay/:amount", function (req, res) {
+  res.locals.url = req.originalUrl;
+  var amount = res.locals.url;
+  amount = amount.split("/stripe-pay/");
+  console.log("URL=>", amount[1], typeof amount[1]);
+  res.render("Home", {
+    key: Publishable_Key,
+    amount: Number(amount[1]),
+  });
+});
 
-// app.post("/payment", function (req, res) {
-//   // Moreover you can take more details from user
-//   // like Address, Name, etc from form
-//   stripe.customers
-//     .create({
-//       email: "email@gmail.co",
-//       source: "tok",
-//       name: "Gautam Sharma",
-//       address: {
-//         line1: "TC 9/4 Old MES colony",
-//         postal_code: "110092",
-//         city: "New Delhi",
-//         state: "Delhi",
-//         country: "India",
-//       },
-//     })
-//     .then((customer) => {
-//       return stripe.charges.create({
-//         amount: 7000, // Charing Rs 25
-//         description: "Web Development Product",
-//         currency: "USD",
-//         customer: customer.id,
-//       });
-//     })
-//     .then((charge) => {
-//       res.send("Success"); // If no error occurs
-//     })
-//     .catch((err) => {
-//       res.send(err); // If some error occurs
-//     });
-// });
+app.post("/stripe-pay/payment", function (req, res) {
+  // Moreover you can take more details from user
+  // like Address, Name, etc from form
+  console.log("End Request =>", req.body);
+  stripe.customers
+    .create({
+      email: req.body.stripeEmail,
+      source: req.body.stripeToken,
+      name: "John Doe",
+      address: {
+        line1: "TC 9/4 Old MES colony",
+        postal_code: "110092",
+        city: "New Delhi",
+        state: "Delhi",
+        country: "India",
+      },
+    })
+    .then((customer) => {
+      console.log("First Then=>", customer);
+      return stripe.charges.create({
+        amount: req.body.amount, // Charing Rs 25
+        description: "Payment Liftick App",
+        currency: "USD",
+        customer: customer.id,
+      });
+    })
+    .then((charge) => {
+      console.log("Second Then=>", charge);
+      // res.send("Success"); // If no error occurs receipt_url
+      res.render("complete");
+    })
+    .catch((err) => {
+      res.send(err); // If some error occurs
+    });
+});
 
 // const options = {
 //   autoIndex: false, // Don't build indexes

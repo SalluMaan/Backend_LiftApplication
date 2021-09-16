@@ -3,17 +3,24 @@
   <title>Stripe Payment Demo</title>
   <body>
     <h3>Welcome to Payment Gateway</h3>
-    <form action="payment" method="POST">
+    <form action="/stripe-pay/payment" method="POST">
       <script
         src="//checkout.stripe.com/v2/checkout.js"
         class="stripe-button"
         data-key="<%= key %>"
-        data-amount="7000"
+        data-amount="<%= amount %>"
         data-currency="usd"
-        data-name="Gautam Sharma"
-        data-description="Buy React.js Complete Course"
+        data-name="Liftick Application"
         data-locale="auto"
+        data-description="Thank You For Using our Services."
       ></script>
+      <input
+        type="text"
+        style="display: none"
+        name="amount"
+        placeholder="amount"
+        value="<%= amount %>"
+      /><br /><br />
     </form>
   </body>
 </html>

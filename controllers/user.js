@@ -40,9 +40,7 @@ exports.allUsers = (req, res) => {
     res.json({
       users,
     });
-  }).select(
-    "name email wallet phoneNumber userType dateOfBirth profileImage updated created isActive"
-  );
+  });
 };
 
 exports.getUser = (req, res) => {

@@ -29,7 +29,6 @@ var upload = multer({ storage: storage });
 const router = express.Router();
 router.post(
   "/vehicle/add-vehicle",
-  upload.single("vehicleImage"),
   requireSignin,
   vehicleAddValidator,
   addVehicle

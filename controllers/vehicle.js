@@ -98,7 +98,6 @@ exports.addVehicle = async (req, res) => {
     Colour: req.body.Colour,
     seatCapacity: req.body.seatCapacity,
     isAC: req.body.isAC,
-    vehicleImage: req.file.filename,
     postedBy: req.auth._id,
   });
   await vehicle.save();

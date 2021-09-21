@@ -7,6 +7,7 @@ const {
   removeUser,
   activateEmail,
   addLicense,
+  changePassword,
 } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
 const router = express.Router();
@@ -38,6 +39,9 @@ router.put(
   upload.single("drivingLicense"),
   addLicense
 );
+
+router.post("/user/change-password", requireSignin, changePassword);
+
 router.delete("/user/:userId", requireSignin, removeUser);
 router.get("/user/activate-email/:userId", activateEmail);
 

@@ -109,3 +109,30 @@ exports.removeUser = (req, res) => {
     res.json({ message: "User has been deleted Successfully!" });
   });
 };
+
+exports.changePassword = (req, res) => {
+  User.findById(req.body.id).exec((err, user) => {
+    if (err || !user) {
+      return res.status(NOT_FOUND).json({
+        error: "User not Found.",
+      });
+    }
+    if (!user.authenticate(req.body.oldPassword)) {
+      return res.status(FORBIDDEN).json({
+        error: "Your Old Password isn't correct..",
+      });
+    }
+
+    user = _.extend(user, { password: req.body.newPassword });
+    user.updated = Date.now();
+    user.save((err) => {
+      if (err) {
+        console.log(err);
+        return res.status(FORBIDDEN).json({
+          error: "User is not Authorized to perform this Action.",
+        });
+      }
+      res.send({ message: "Your Password has been Changed Successfully!" });
+    });
+  });
+};

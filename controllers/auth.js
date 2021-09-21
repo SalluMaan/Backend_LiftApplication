@@ -79,15 +79,16 @@ exports.signin = (req, res) => {
       user;
     return res.json({
       token,
-      user: {
-        _id,
-        name,
-        email,
-        wallet,
-        phoneNumber,
-        dateOfBirth,
-        userType,
-      },
+      user: user,
+      // {
+      //   _id,
+      //   name,
+      //   email,
+      //   wallet,
+      //   phoneNumber,
+      //   dateOfBirth,
+      //   userType,
+      // },
     });
   });
 };

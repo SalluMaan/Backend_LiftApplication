@@ -51,6 +51,7 @@ exports.addRide = async (req, res) => {
     seatFor: req.body.seatFor,
     isSeatAvailable: req.body.isSeatAvailable,
     seatAvailable: req.body.seatCapacity,
+    prefrences: req.body.prefrences,
   });
   await ride.save();
   res.status(200).json({

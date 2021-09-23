@@ -100,7 +100,8 @@ exports.requestForgotPassword = async (req, res) => {
       error: "User With this Email ID is Does't Exist!",
     });
   }
-  const requestToken = crypto.randomBytes(10).toString("hex");
+  const requestToken = crypto.randomBytes(2).toString("hex");
+  // const requestToken = Math.floor(1000 + Math.random() * 9000);
 
   await sendEmail("requestForgotPassword", {
     token: requestToken,

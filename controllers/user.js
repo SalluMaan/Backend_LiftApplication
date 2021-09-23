@@ -81,7 +81,11 @@ exports.updateUser = (req, res, next) => {
 
 exports.addLicense = (req, res, next) => {
   let user = req.profile;
-  user = _.extend(user, { ...req.body, drivingLicense: req.file.filename });
+  user = _.extend(user, {
+    ...req.body,
+    drivingLicense: req.file.filename,
+    idCardNumber: req.body.idCardNumber,
+  });
   console.log("ADD LICENSE", user);
   user.updated = Date.now();
   user.save((err) => {
@@ -92,7 +96,10 @@ exports.addLicense = (req, res, next) => {
     }
     user.hashed_password = undefined;
     user.salt = undefined;
-    res.json({ user });
+    res.json({
+      message: "Your License Verification Request has been sent to Admin",
+      user,
+    });
   });
 };
 

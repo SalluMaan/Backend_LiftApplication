@@ -61,6 +61,11 @@ exports.addSetting = async (req, res) => {
     colorList: req.body.colorList,
     adminShare: req.body.adminShare,
     firebaseID: req.body.firebaseID,
+    logo: req.body.logo,
+    country: req.body.country,
+    city: req.body.city,
+    baseUrl: req.body.baseUrl,
+    chatLink: req.body.chatLink,
     postedBy: req.auth._id,
   });
   await setting.save();

@@ -8,7 +8,13 @@ const complaintScheema = new mongoose.Schema({
   issueDescription: {
     type: String,
   },
-
+  rideID: {
+    type: ObjectId,
+    ref: "Ride",
+  },
+  issueImage: {
+    type: String,
+  },
   status: {
     type: String,
     default: "pending",

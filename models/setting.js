@@ -5,6 +5,21 @@ const settingScheema = new mongoose.Schema({
   nameOfApp: {
     type: String,
   },
+  baseUrl: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  baseUrl: {
+    type: String,
+  },
+  logo: {
+    type: String,
+  },
+  chatLink: {
+    type: String,
+  },
   colorList: [
     {
       type: String,

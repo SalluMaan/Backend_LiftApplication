@@ -44,6 +44,7 @@ exports.allComplaintListOfUser = (req, res) => {
 exports.allComplaintList = (req, res) => {
   const complaint = Complaint.find()
     .populate("postedBy", "_id name")
+    .populate("rideID")
     .then((complaints) => {
       res.json({
         complaints,
@@ -81,6 +82,8 @@ exports.addComplaint = async (req, res) => {
     issueTitle: req.body.issueTitle,
     issueDescription: req.body.issueDescription,
     status: req.body.status,
+    rideID: req.body.rideID,
+    issueImage: req.body.issueImage,
     isActive: req.body.isActive,
     postedBy: req.auth._id,
   });

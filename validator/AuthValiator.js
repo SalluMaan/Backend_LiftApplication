@@ -135,3 +135,27 @@ exports.userFogotPasswordValidator = (req, res, next) => {
   //proceed to next middleware
   next();
 };
+
+exports.userAddLicenseValidator = (req, res, next) => {
+  // req
+  //   .check("drivingLicense", "License Image is Required.Kindly Send it!Thanks")
+  //   .notEmpty();
+
+  req
+    .check(
+      "idCardNumber",
+      "ID Card is Required.Kindly Write Your Valid ID Card Number!Thanks"
+    )
+    .notEmpty();
+
+  //check for errors
+  const errors = req.validationErrors();
+  if (errors) {
+    const firstError = errors.map((error) => error.msg)[0];
+    // console.log("ERROR 1st:".firstError)
+    return res.status(BAD_REQUEST).json({ error: firstError });
+  }
+
+  //proceed to next middleware
+  next();
+};

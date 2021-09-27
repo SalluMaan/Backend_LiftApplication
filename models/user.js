@@ -6,21 +6,15 @@ const crypto = require("crypto");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    trim: true,
   },
   email: {
     type: String,
-    required: true,
-    trim: true,
   },
   hashed_password: {
     type: String,
-    required: true,
   },
   phoneNumber: {
     type: String,
-    required: true,
   },
   idCardNumber: {
     type: String,
@@ -43,11 +37,9 @@ const userSchema = new mongoose.Schema({
   },
   userType: {
     type: String,
-    required: true,
   },
   isAdmin: {
     type: Boolean,
-    required: true,
     default: false,
   },
   isActive: {
@@ -75,6 +67,9 @@ const userSchema = new mongoose.Schema({
     default: null,
   },
   drivingLicense: {
+    type: String,
+  },
+  type: {
     type: String,
   },
   resetToken: {

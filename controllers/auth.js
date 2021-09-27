@@ -41,8 +41,109 @@ exports.signup = async (req, res, next) => {
   // //return  resp with user and token to frontend client
 };
 
+exports.signupSocialLogin = async (req, res, next) => {
+  const userExists = await User.findOne({ email: req.body.email });
+  console.log("User Exist=>", userExists);
+  if (userExists) {
+    const token = jwt.sign({ _id: userExists._id }, process.env.JWT_SECRET);
+    //persist token as 't' in cookie with expiry date
+
+    res.cookie("t", token, { expire: new Date() + 9999 });
+
+    //return  resp with user and token to frontend client
+    return res.json({
+      token,
+      user: userExists,
+      message: "Login Successfully!",
+    });
+  }
+
+  const pass = "#" + req.body.name + crypto.randomBytes(2).toString("hex");
+  const user = await new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: pass,
+    profileImage: req.body.profileImage,
+    userType: req.body.userType,
+    type: req.body.type,
+    isEmailVerified: true,
+  });
+  await user.save();
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+  //persist token as 't' in cookie with expiry date
+
+  res.cookie("t", token, { expire: new Date() + 9999 });
+
+  await sendEmail("signup", {
+    id: user._id,
+    email: user.email,
+    app_url: process.env.APPBASE_URL,
+  });
+
+  //return  resp with user and token to frontend client
+  return res.json({
+    token,
+    user: user,
+    message: "Signup Successfully!",
+  });
+
+  // //return  resp with user and token to frontend client
+};
+
 exports.signin = (req, res) => {
   const { email, password } = req.body;
+  console.log("Request =>", email, password);
+
+  //find user
+  User.findOne({ email: req.body.email }, (err, user) => {
+    //Error or no user
+    if (err || !user) {
+      return res.status(FORBIDDEN).json({
+        error: "User with this Email Doesn't exist.Please Sign in Again...",
+      });
+    }
+
+    if (!user.isEmailVerified) {
+      return res.status(UNAUTHORIZE).json({
+        error: "Your Account havn't Verified.Kindly Check your Inbox!Thanks",
+      });
+    }
+
+    //user is found pass/email must match
+    //create authenticate method in model and use here
+    if (!user.authenticate(password)) {
+      return res.status(FORBIDDEN).json({
+        error: "Email and Password doesn't match..",
+      });
+    }
+    //generate token with userId and secret
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    //persist token as 't' in cookie with expiry date
+
+    res.cookie("t", token, { expire: new Date() + 9999 });
+
+    //return  resp with user and token to frontend client
+
+    const { _id, name, email, wallet, phoneNumber, dateOfBirth, userType } =
+      user;
+    return res.json({
+      token,
+      user: user,
+      // {
+      //   _id,
+      //   name,
+      //   email,
+      //   wallet,
+      //   phoneNumber,
+      //   dateOfBirth,
+      //   userType,
+      // },
+    });
+  });
+};
+
+exports.signinSocailLogin = (req, res) => {
+  const { email, type } = req.body;
   console.log("Request =>", email, password);
 
   //find user
@@ -117,7 +218,7 @@ exports.requestForgotPassword = async (req, res) => {
       });
     }
     res.send({
-      message: "Reset Password Token send Successfully!",
+      message: "Email Verification Code Has Been sent to Your Email ID!",
       id: userExists._id,
     });
   });

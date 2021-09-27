@@ -5,6 +5,7 @@ const {
   signout,
   requestForgotPassword,
   resetPassword,
+  signupSocialLogin,
 } = require("../controllers/auth");
 const { userById } = require("../controllers/user");
 
@@ -30,6 +31,7 @@ var upload = multer({ storage: storage });
 
 const router = express.Router();
 router.post("/signup", userSignUpValidator, signup);
+router.post("/signup-social", signupSocialLogin);
 router.post("/signin", userSignInValidator, signin);
 router.get("/signout", signout);
 router.post(

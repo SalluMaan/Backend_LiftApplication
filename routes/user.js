@@ -13,6 +13,7 @@ const { requireSignin } = require("../controllers/auth");
 const router = express.Router();
 
 var multer = require("multer");
+const { userAddLicenseValidator } = require("../validator/AuthValiator");
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -37,6 +38,7 @@ router.put(
   "/user/license/:userId",
   requireSignin,
   upload.single("drivingLicense"),
+  userAddLicenseValidator,
   addLicense
 );
 

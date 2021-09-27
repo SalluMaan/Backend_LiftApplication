@@ -80,7 +80,7 @@ exports.signupSocialLogin = async (req, res, next) => {
     app_url: process.env.APPBASE_URL,
   });
 
-  //return  resp with user and token to frontend client
+  // return  resp with user and token to frontend client
   return res.json({
     token,
     user: user,

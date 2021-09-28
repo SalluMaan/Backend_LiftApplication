@@ -50,12 +50,6 @@ exports.verifyAdmin = (req, res, next) => {
 };
 
 exports.addSetting = async (req, res) => {
-  //   const couponExists = await Coupon.findOne({ code: req.body.code });
-  //   if (couponExists) {
-  //     return res.status(403).json({
-  //       error: "Coupon With this Code is Already Exist!",
-  //     });
-  //   }
   const setting = await new Setting({
     nameOfApp: req.body.nameOfApp,
     colorList: req.body.colorList,

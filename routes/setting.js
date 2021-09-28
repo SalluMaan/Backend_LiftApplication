@@ -15,15 +15,15 @@ const {
 
 const router = express.Router();
 router.post("/setting/add-setting", requireSignin, verifyAdmin, addSetting);
-router.get(
-  "/setting/all-settings",
-  requireSignin,
-  verifyAdmin,
-  allSettingsList
-);
+// router.get(
+//   "/setting/all-settings",
+//   requireSignin,
+//   verifyAdmin,
+//   allSettingsList
+// );
 router.get("/setting/:settingID", requireSignin, verifyAdmin, getSetting);
 router.put("/setting/:settingID", requireSignin, verifyAdmin, updateSetting);
-router.delete("/setting/:settingID", requireSignin, verifyAdmin, removeSetting);
+// router.delete("/setting/:settingID", requireSignin, verifyAdmin, removeSetting);
 
 // //any route contain couponID app first exec() userById
 router.param("settingID", settingById);
